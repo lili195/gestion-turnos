@@ -209,6 +209,7 @@ function App() {
         handleCurrentPage={handleCurrentPage}
         handleService={handleService}
         userName={userName}
+        currentService={currentService}
       />
       {currentPage === PAGES.HOME && (
         <Home handleService={handleService} handlePage={handleCurrentPage} />
