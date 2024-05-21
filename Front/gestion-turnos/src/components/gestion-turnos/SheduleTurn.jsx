@@ -18,7 +18,7 @@ const SheduleTurn = ({
   handleCurrentPage,
 }) => {
   const [message, setMessage] = useState("");
-  const [creationState, setCreationState] = useState('success');
+  const [creationState, setCreationState] = useState('error');
   const [openModal, setOpenModal] = useState(false);
 
   const handleOpenModal = () => {

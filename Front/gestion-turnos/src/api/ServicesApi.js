@@ -18,11 +18,9 @@ export const fetchUsers = async () => {
     try {
         const response = await fetch(SERVICES_BACK.GET_USERS);
         if (!response.ok) {
-            //console.log("hola, entro.")
             throw new Error(`Error en la petición: ${response.statusText}`);
         }
         const data = await response.json();
-        console.log("data users: " , data)
         return data;
     } catch (error) {
         console.log('Hubo un problema con el fetch:', error);
@@ -57,3 +55,14 @@ export const createShift = async (shift) => {
     }
     return response.json();
 };
+
+export const deleteShiftById = async (id) => {
+    const response = await fetch(`${SERVICES_BACK.DELETE_SHIFT}/${id}`, {
+        method: 'DELETE',
+    });
+    if (!response.ok) {
+        throw new Error('Failed to delete shift');
+    }
+    const result = await response.json();
+    return result;
+}

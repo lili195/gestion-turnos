@@ -45,8 +45,13 @@ public class ShiftService {
         return shiftRepository.save(shift);
     }
 
-    public void deleteShiftById(Long id) {
-        shiftRepository.deleteById(id);
+    public boolean deleteShiftById(Long id) {
+        if (shiftRepository.existsById(id)) {
+            shiftRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean existsShiftByDateTimeAndService(LocalDate date, String time, String service) {
