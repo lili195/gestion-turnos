@@ -396,7 +396,7 @@ body {
 
 .sheduleTurnSection-button {
   margin-top: 2vh;
-  background-color: #00AAFF;
+  background-color: #00aaff;
   color: #fff;
   width: 40vw;
   height: 7vh;
@@ -420,4 +420,152 @@ body {
   color: #cccccc !important;
   border: none;
   border-radius: 0 5px 5px 0;
+}
+
+/* ----------------------------- MODAL ------------------------------------- */
+
+.modalContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60vw;
+  background-color: #fff;
+  box-shadow: 24;
+  border-radius: 10px;
+  padding: 2vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3vh;
+  gap: 2vh;
+}
+.modalIcon {
+  max-width: 20vw;
+}
+.modalText {
+  font-size: 3.6vh;
+  font-weight: 700;
+}
+.modalButton {
+  background-color: #00aaff;
+  color: #fff;
+  width: 40vw;
+  height: 7vh;
+  text-align: center;
+  font-size: 3vh;
+  font-weight: 700;
+  font-stretch: expanded;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+/* ----------------------------- YOUR TURN ------------------------------------- */
+.yourTurnSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 3vh;
+}
+
+.turnInfoSection-title {
+  font-size: 5vh !important;
+  font-weight: 700 !important;
+  text-align: center;
+  margin-top: 5vh;
+}
+
+.turnInfoCardContainer {
+  width: 50vw;
+  height: 33vh;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 5vh;
+  gap: 10vh;
+  background-color: #c1f7f9;
+  border: solid 1px #64bcfb;
+}
+.turnInfo-card {
+  background-color: #fffcbb;
+  width: 12vw;
+  height: 20vh;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.turnInfo-cardText{
+  font-size: 3vh;
+  font-weight: 300;
+  margin-top: 3vh;
+}
+.turnInfo-cardNumber{
+  font-size: 10vh;
+  font-weight: 700;
+  margin-top: -2vh;
+}
+.turnInfo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 50%;
+}
+.turnInfo-content-up {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-right: 4vw;
+  width: 100%;
+}
+.turnInfo-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.turnInfo-title {
+  font-size: 1em;
+  font-weight: 300;
+}
+.turnInfo-info {
+  font-size: 1.2em;
+  font-weight: 700;
+}
+
+/* ----------------------------- TURN CARD ------------------------------------- */
+
+.turnCard {
+  background-color: #71eeff;
+  width: 25vw;
+  height: 30vh;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.turnCard-text {
+  font-size: 2.5em;
+  margin-top: 5vh;
+}
+
+.turnCard-number {
+  font-size: 5em;
+  margin-top: -2vh;
 }

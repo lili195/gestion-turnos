@@ -15,7 +15,7 @@ import YourTurn from './components/gestion-turnos/YourTurn';
 import CancelTurn from './components/gestion-turnos/CancelTurn';
 import Notifications from './components/gestion-turnos/Notifications';
 import Keycloak from 'keycloak-js';
-import { fetchServiceInfo } from './api/ServicesApi';
+import { fetchServiceInfo, fetchUsers, checkUserShiftByDate } from './api/ServicesApi';
 
 function App() {
   const [keycloak, setKeycloak] = useState(null);
@@ -26,7 +26,7 @@ function App() {
   const [serviceInfo, setServiceInfo] = useState({});
   const [userName, setUserName] = useState('Pilar');
   const [usersList, setUsersList] = useState(['userX', 'Pila', 'Martin']); // quemado mientras esté el servicio que traiga la lista de usuarios
-
+  const [createdTurn, setCreatedTurn] = useState([]);
   // --------------------------------------ESTO ES NUEVO PERO ES NECESARIO--------------------------------------------------
 
   const [turnInfo, setTurnInfo] = useState({
@@ -66,13 +66,14 @@ function App() {
       room: serviceInfo.room,
     }));
   }, [currentService]);
-
+  
   useEffect(() => {
     setTurnInfo((prevTurnInfo) => ({
       ...prevTurnInfo,
       userSelected: userName,
     }));
   }, [userName]);
+
 
   // ------------------------------------------------COSAS POR COMENTAR-------------------------------------------
 
@@ -162,7 +163,43 @@ function App() {
     };
     fetchInfo();
   }, [currentService]);
+
+  useEffect(() => {
+    console.log("entro aqui")
+    const fetchAndSetUsers = async () => {
+      try {
+        console.log("entro......")
+        const users = await fetchUsers();
+        setUsersList(users);
+        //console.log("entro......")
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+    fetchAndSetUsers();
+  }, [currentService]);
   
+
+
+  //------------------------------------Seccion de info del turno----------------------//
+  //hacer el fetch para llamar el servicio con la fecha y el username
+  //primero con data quemada --> turnInfo
+
+  useEffect(() => {
+    const fetchTurn = async () => {
+      try {
+        if (currentPage === PAGES.TURN && currentService) {
+          const data = await checkUserShiftByDate(userName, turnInfo.dateSelected);
+          setCreatedTurn(data);
+          //console.log("turno creado: ", data);
+        }
+      } catch (error) {
+        console.error('Error fetching service info:', error);
+      }
+    };
+    fetchTurn();
+  }, [currentPage, currentService, userName, turnInfo.dateSelected]);
+
   return started ? (
     <div>
       <Header />
@@ -181,9 +218,10 @@ function App() {
           turnInfo={turnInfo}
           handleTurnInfo={handleTurnInfo}
           userType={userType}
+          handleCurrentPage={handleCurrentPage}
         />
       )}
-      {currentPage === PAGES.TURN && <YourTurn />}
+      {currentPage === PAGES.TURN && <YourTurn createdTurn={createdTurn} />}
       {currentPage === PAGES.CANCEL && <CancelTurn />}
       {currentPage === PAGES.NOTIFICATIONS && <Notifications />}
     </div>

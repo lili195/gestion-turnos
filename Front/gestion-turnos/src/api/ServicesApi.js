@@ -16,14 +16,16 @@ export const fetchServiceInfo = async (serviceType) => {
 
 export const fetchUsers = async () => {
     try {
-        const response = await fetch(`${SERVICES_BACK.GET_USERS}`);
+        const response = await fetch(SERVICES_BACK.GET_USERS);
         if (!response.ok) {
+            //console.log("hola, entro.")
             throw new Error(`Error en la petición: ${response.statusText}`);
         }
         const data = await response.json();
+        console.log("data users: " , data)
         return data;
     } catch (error) {
-        console.error('Hubo un problema con el fetch:', error);
+        console.log('Hubo un problema con el fetch:', error);
         throw error;
     }
 };

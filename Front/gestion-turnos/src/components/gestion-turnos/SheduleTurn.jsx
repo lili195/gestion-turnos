@@ -1,17 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import ReactDatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaCalendarAlt } from 'react-icons/fa';
-import { USER_TYPE } from '../../constants/constants';
+import React, { useState, useEffect } from "react";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { FaCalendarAlt } from "react-icons/fa";
+import { PAGES, USER_TYPE } from "../../constants/constants";
 import {
   checkUserShiftByDate,
   checkShiftAvailability,
   createShift,
-} from '../../api/ServicesApi';
+} from "../../api/ServicesApi";
+import BasicModal from "./BasicModal";
 
-const SheduleTurn = ({ turnInfo, handleTurnInfo, userType }) => {
-  const [message, setMessage] = useState('');
+const SheduleTurn = ({
+  turnInfo,
+  handleTurnInfo,
+  userType,
+  handleCurrentPage,
+}) => {
+  const [message, setMessage] = useState("");
+  const [creationState, setCreationState] = useState('success');
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(!openModal);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(!openModal);
+    handleCurrentPage(PAGES.TURN);
+  };
 
   // Primero armamos el turno acá antes de mandarlo al app.js
   const [formData, setFormData] = useState({
@@ -25,9 +42,9 @@ const SheduleTurn = ({ turnInfo, handleTurnInfo, userType }) => {
     setFormData((prevData) => ({
       ...prevData,
       date: new Date(),
-      time: '',
-      user: '',
-      dependent: '',
+      time: "",
+      user: "",
+      dependent: "",
     }));
   };
 
@@ -63,9 +80,11 @@ const SheduleTurn = ({ turnInfo, handleTurnInfo, userType }) => {
       ...prevTurnInfo,
       dateSelected: formatDate(formData.date),
       timeSelected: formData.time,
-      userSelected: formData.user === '' ? turnInfo.userSelected : formData.user,
+      userSelected:
+        formData.user === "" ? turnInfo.userSelected : formData.user,
       dependentSelected: formData.dependent,
     }));
+    handleOpenModal();
     resetData();
   };
 
@@ -95,14 +114,14 @@ const SheduleTurn = ({ turnInfo, handleTurnInfo, userType }) => {
         // Verificar que el usuario no tenga un turno para esa fecha
         const userTurns = await checkUserShiftByDate(user, date);
         if (userTurns.length > 0) {
-          setMessage('You already have a turn for this date.');
+          setMessage("You already have a turn for this date.");
           return;
         }
 
         // Verificar disponibilidad de fecha, hora y dependiente
         const availability = await checkShiftAvailability(date, time, service);
         if (availability) {
-          setMessage('The selected time is not available.');
+          setMessage("The selected time is not available.");
           return;
         }
 
@@ -116,20 +135,20 @@ const SheduleTurn = ({ turnInfo, handleTurnInfo, userType }) => {
           room: turnInfo.room,
         };
         await createShift(turn);
-        setMessage('Turn scheduled successfully.');
+        setMessage("Turn scheduled successfully.");
+        setCreationState('success');
       } catch (error) {
         setMessage(`Error: ${error.message}`);
       }
-
     };
 
     const isNotEmptyTurnInfo =
       turnInfo.dateSelected !== undefined &&
-      turnInfo.dateSelected !== '' &&
+      turnInfo.dateSelected !== "" &&
       turnInfo.userSelected !== undefined &&
-      turnInfo.userSelected !== '' &&
+      turnInfo.userSelected !== "" &&
       turnInfo.time !== undefined &&
-      turnInfo.time !== '';
+      turnInfo.time !== "";
 
     //SOLO ES QUITAR EL && false DE LA SIGUIENTE LINEA PARA QUE SE EJECUTE EL HANDLE
     if (turnInfo) {
@@ -240,6 +259,12 @@ const SheduleTurn = ({ turnInfo, handleTurnInfo, userType }) => {
           </button>
         </form>
       </div>
+      <BasicModal
+        open={openModal}
+        handleOpen={handleCloseModal}
+        type={creationState}
+        message={message}
+      />
     </div>
   );
 };
