@@ -132,7 +132,7 @@ function App() {
           setCurrentPage(PAGES.HOME);
           const token_string = keycloak.token;
           fetch(SERVICES_BACK.TOKEN_SERVICE, {
-            method: "GET",
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${keycloak.token}`,
