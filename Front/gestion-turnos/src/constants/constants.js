@@ -19,7 +19,7 @@ export const USER_TYPE = {
 };
 
 export const SERVICES_BACK = {
-  TOKEN_SERVICE: "http://localhost:8086/api/user/addUser",
+  TOKEN_SERVICE: "http://localhost:8085/token/hello-1",
   GET_USERS: "http://localhost:8086/api/user/listUsers",
   SERVICES_INFO: "http://localhost:8082/api/turn/services",
   CHECK_SHIFT: "http://localhost:8083/api/shifts",

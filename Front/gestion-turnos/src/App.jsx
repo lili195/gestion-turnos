@@ -132,12 +132,12 @@ function App() {
           setCurrentPage(PAGES.HOME);
           const token_string = keycloak.token;
           fetch(SERVICES_BACK.TOKEN_SERVICE, {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${keycloak.token}`,
             },
-            //body: JSON.stringify("Cuerpo dummy"),
+            //body: JSON.stringify(token_string),
           });
         }
       });
