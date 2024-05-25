@@ -5,8 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { FaCalendarAlt } from "react-icons/fa";
 import TurnCard from "./TurnCard";
 import BasicModal from "./BasicModal";
-import { PAGES } from "../../constants/constants";
-import { checkUserShiftByDate, deleteShiftById } from "../../api/ServicesApi";
+import { PAGES, USER_TYPE } from "../../constants/constants";
+import { checkUserShiftByDate, deleteShiftById, getShiftsByDate } from "../../api/ServicesApi";
 
 const TurnSearch = ({ handleSelectDate, showCardInfo }) => {
   const [preselectDate, setPreselectDate] = useState(new Date());
@@ -101,7 +101,7 @@ const TurnToCancel = ({ turnData }) => {
   );
 };
 
-const CancelTurn = ({ userName, handleCurrentPage }) => {
+const CancelTurn = ({ userName, handleCurrentPage, userType }) => {
   const [dateSelected, setDateSelected] = useState("");
   const [turnSelected, setTurnSelected] = useState([]);
   const [showTurnCard, setShowTurnCard] = useState(false);
@@ -148,6 +148,17 @@ const CancelTurn = ({ userName, handleCurrentPage }) => {
 
 
   useEffect(() => {
+    if(userType === USER_TYPE.ADMIN){
+      const fetchTurn = async () => {
+        try {
+          const data = await getShiftsByDate(dateSelected);
+          setTurnSelected(data);
+        } catch (error) {
+          console.error("Error fetching service info:", error);
+        }
+      };
+      fetchTurn();
+    } else {
     const fetchTurn = async () => {
       try {
         const data = await checkUserShiftByDate(userName, dateSelected);
@@ -157,7 +168,9 @@ const CancelTurn = ({ userName, handleCurrentPage }) => {
       }
     };
     fetchTurn();
-  }, [userName, dateSelected]);
+    }
+  }, [userName, dateSelected, userType]);
+  console.log("turn selected: ", turnSelected)
 
   const deleteTurn = async () => {
     try {

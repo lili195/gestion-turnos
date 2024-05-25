@@ -36,6 +36,15 @@ export const checkUserShiftByDate = async (user, date) => {
     return response.json();
 };
 
+export const getShiftsByDate = async (date) => {
+    const response = await fetch(`${SERVICES_BACK.CHECK_SHIFT}/date/${date}`);
+    if (!response.ok) {
+        throw new Error(`Error en la petición de turnos: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
+};
+
 export const checkShiftAvailability = async (date, time, service) => {
     const response = await fetch(`${SERVICES_BACK.CHECK_SHIFT}/${date}/${time}/${service}`);
     if (!response.ok) {

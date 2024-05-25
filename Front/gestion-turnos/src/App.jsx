@@ -19,6 +19,7 @@ import {
   fetchServiceInfo,
   fetchUsers,
   checkUserShiftByDate,
+  getShiftsByDate,
 } from "./api/ServicesApi";
 
 function App() {
@@ -167,6 +168,18 @@ function App() {
     fetchInfo();
   }, [currentService]);
 
+  useEffect(() => {
+    const fetchUsersA = async () => {
+      try {
+        const data = await fetchUsers();
+        console.log('usuarios: ', data);
+      } catch (error) {
+        console.error("Error fetching service info:", error);
+      }
+    };
+    fetchUsersA();
+  }, [userType]);
+
   // useEffect(() => {
   //   console.log("entro aqui")
   //   const fetchAndSetUsers = async () => {
@@ -224,7 +237,7 @@ function App() {
       )}
       {currentPage === PAGES.TURN && <YourTurn createdTurn={createdTurn} />}
       {currentPage === PAGES.CANCEL && (
-        <CancelTurn userName={userName} handleCurrentPage={handleCurrentPage} />
+        <CancelTurn userName={userName} handleCurrentPage={handleCurrentPage} userType={userType} />
       )}
       {currentPage === PAGES.NOTIFICATIONS && <Notifications createdTurn={createdTurn}/>}
     </div>
