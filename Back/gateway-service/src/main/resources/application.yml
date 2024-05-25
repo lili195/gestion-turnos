@@ -1,0 +1,51 @@
+server:
+  port: 8089
+
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka/
+  interface:
+    hostname: localhost
+  instance:
+    prefer-ip-address: true
+
+spring:
+  application:
+    name: Gateway-service
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://localhost:3000"
+            allowed-headers:
+              - "*"
+            allowed-methods:
+              - "*"
+            allow-credentials: true
+      discovery:
+        locator:
+          enable: true
+      routes:
+        - id: turn-services
+          uri: lb://turn-services
+          predicates:
+            - Path=/api/turn/**
+        - id: token
+          uri: lb://token
+          predicates:
+            - Path=/token/**
+        - id: shift-services
+          uri: lb://shift-services
+          predicates:
+            - Path=/api/shifts/**
+        - id: keycloak_security
+          uri: lb://keycloak_security
+          predicates:
+            - Path=/token/**
+        - id: user-service-application
+          uri: lb://user-service-application
+          predicates:
+            - Path=/api/user/**

@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/token")
-@CrossOrigin
 public class TestController {
 
     @Autowired

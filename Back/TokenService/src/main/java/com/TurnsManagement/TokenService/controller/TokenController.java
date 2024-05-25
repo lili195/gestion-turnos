@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/token")
-@CrossOrigin
 public class TokenController {
     private String myToken = "";
 
