@@ -610,3 +610,16 @@ body {
   border: none;
   cursor: pointer;
 }
+
+.cancelTurnAdmin-container{
+  
+}
+
+.centerButton{
+  margin-top: 7vh;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+}

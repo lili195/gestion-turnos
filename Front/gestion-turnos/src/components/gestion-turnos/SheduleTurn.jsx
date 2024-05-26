@@ -10,6 +10,7 @@ import {
   createShift,
 } from "../../api/ServicesApi";
 import BasicModal from "./BasicModal";
+import { formatDate } from "../../utils/utils";
 
 const SheduleTurn = ({
   turnInfo,
@@ -65,13 +66,6 @@ const SheduleTurn = ({
       ...prevData,
       date: date,
     }));
-  };
-
-  const formatDate = (date) => {
-    const day = `0${date.getDate()}`.slice(-2);
-    const month = `0${date.getMonth() + 1}`.slice(-2);
-    const year = date.getFullYear();
-    return `${year}-${month}-${day}`;
   };
 
   const handleSubmit = (e) => {

@@ -19,7 +19,6 @@ import {
   fetchServiceInfo,
   fetchUsers,
   checkUserShiftByDate,
-  getShiftsByDate,
 } from "./api/ServicesApi";
 
 function App() {
@@ -30,7 +29,7 @@ function App() {
   const [currentService, setCurrentService] = useState("");
   const [serviceInfo, setServiceInfo] = useState({});
   const [userName, setUserName] = useState("Pilar");
-  const [usersList, setUsersList] = useState(["userX", "Pila", "Martin"]); // quemado mientras esté el servicio que traiga la lista de usuarios
+  const [usersList, setUsersList] = useState([]); // quemado mientras esté el servicio que traiga la lista de usuarios
   const [createdTurn, setCreatedTurn] = useState([]);
   // --------------------------------------ESTO ES NUEVO PERO ES NECESARIO--------------------------------------------------
 
@@ -70,7 +69,7 @@ function App() {
       timeSelected: "",
       room: serviceInfo.room,
     }));
-  }, [currentService]);
+  }, [currentService, usersList]);
 
   useEffect(() => {
     setTurnInfo((prevTurnInfo) => ({
@@ -131,14 +130,12 @@ function App() {
           );
           setUserName(keycloak.tokenParsed.preferred_username);
           setCurrentPage(PAGES.HOME);
-          const token_string = keycloak.token;
           fetch(SERVICES_BACK.TOKEN_SERVICE, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${keycloak.token}`,
             },
-            //body: JSON.stringify(token_string),
           });
         }
       });
@@ -169,31 +166,20 @@ function App() {
   }, [currentService]);
 
   useEffect(() => {
-    const fetchUsersA = async () => {
-      try {
-        const data = await fetchUsers();
-        console.log('usuarios: ', data);
-      } catch (error) {
-        console.error("Error fetching service info:", error);
-      }
-    };
-    fetchUsersA();
-  }, [userType]);
+    if (keycloak !== null && userType === USER_TYPE.ADMIN && currentService !== "") {
+      const fetchUsersA = async () => {
+        try {
+          const users = await fetchUsers(keycloak);
+          const usernames = users.map(user => user.username);
+          setUsersList(usernames);
+        } catch (error) {
+          console.error("Error fetching service info:", error);
+        }
+      };
+      fetchUsersA();
+    }
+  }, [userType, currentService]);
 
-  // useEffect(() => {
-  //   console.log("entro aqui")
-  //   const fetchAndSetUsers = async () => {
-  //     try {
-  //       console.log("entro......")
-  //       const users = await fetchUsers();
-  //       setUsersList(users);
-  //       //console.log("entro......")
-  //     } catch (error) {
-  //       console.error('Error fetching users:', error);
-  //     }
-  //   };
-  //   fetchAndSetUsers();
-  // }, [currentService]);
 
   //------------------------------------Seccion de info del turno----------------------//
   useEffect(() => {
@@ -237,9 +223,15 @@ function App() {
       )}
       {currentPage === PAGES.TURN && <YourTurn createdTurn={createdTurn} />}
       {currentPage === PAGES.CANCEL && (
-        <CancelTurn userName={userName} handleCurrentPage={handleCurrentPage} userType={userType} />
+        <CancelTurn
+          userName={userName}
+          handleCurrentPage={handleCurrentPage}
+          userType={userType}
+        />
       )}
-      {currentPage === PAGES.NOTIFICATIONS && <Notifications createdTurn={createdTurn}/>}
+      {currentPage === PAGES.NOTIFICATIONS && (
+        <Notifications createdTurn={createdTurn} />
+      )}
     </div>
   ) : (
     <InitialPage onStart={handleStart} />

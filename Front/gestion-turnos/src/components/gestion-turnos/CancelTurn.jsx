@@ -6,21 +6,24 @@ import { FaCalendarAlt } from "react-icons/fa";
 import TurnCard from "./TurnCard";
 import BasicModal from "./BasicModal";
 import { PAGES, USER_TYPE } from "../../constants/constants";
-import { checkUserShiftByDate, deleteShiftById, getShiftsByDate } from "../../api/ServicesApi";
+import {
+  checkUserShiftByDate,
+  deleteShiftById,
+  getShiftsByDate,
+} from "../../api/ServicesApi";
+import CancelTurnAdmin from "./CancelTurnAdmin";
+import { formatDate } from "../../utils/utils";
+import Box from "@mui/material/Box";
+import Check from "./turnos-images/CheckIcon.svg";
+import Equis from "./turnos-images/EquisIcon.svg";
 
 const TurnSearch = ({ handleSelectDate, showCardInfo }) => {
   const [preselectDate, setPreselectDate] = useState(new Date());
 
-  const formatDate = (date) => {
-    const day = `0${date.getDate()}`.slice(-2);
-    const month = `0${date.getMonth() + 1}`.slice(-2);
-    const year = date.getFullYear();
-    return `${year}-${month}-${day}`;
-  };
-
   const handleDate = (date) => {
     setPreselectDate(date);
   };
+
   const CustomCalendarInput = ({ value, onClick }) => (
     <div className="input-group">
       <input
@@ -55,7 +58,9 @@ const TurnSearch = ({ handleSelectDate, showCardInfo }) => {
               maxDate={new Date().setDate(new Date().getDate() + 30)}
               className="formItem-input smallInput"
               required
-              customInput={<CustomCalendarInput value={preselectDate} />}
+              customInput={
+                <CustomCalendarInput value={formatDate(preselectDate)} />
+              }
             />
           </label>
         </div>
@@ -101,6 +106,22 @@ const TurnToCancel = ({ turnData }) => {
   );
 };
 
+// const EmptyDate = ({ message }) => {
+//   return (
+//     <Box className="modalContainer">
+//       <img src={Equis} className="modalIcon" alt="success icon" />
+//       <div className="modalContent" id="modal-modal-description">
+//         <span className="modalText">
+//           {message || "Default message to modal"}
+//         </span>
+//         <button className="modalButton" onClick={() => {}}>
+//           Aceptar
+//         </button>
+//       </div>
+//     </Box>
+//   );
+// };
+
 const CancelTurn = ({ userName, handleCurrentPage, userType }) => {
   const [dateSelected, setDateSelected] = useState("");
   const [turnSelected, setTurnSelected] = useState([]);
@@ -109,13 +130,10 @@ const CancelTurn = ({ userName, handleCurrentPage, userType }) => {
   const [isCanceled, setIsCanceled] = useState(false);
   const [message, setMessage] = useState("");
   const isNotEmptyTurnData = turnSelected.length > 0;
-  const [emptyTurnModal, setEmptyTurnModal] = useState(
-    showTurnCard && !isNotEmptyTurnData
-    //true
-  );
+  const [emptyTurnModal, setEmptyTurnModal] = useState(false);
 
   const handleOpenModal = () => {
-    setOpenModal(!openModal);
+    setOpenModal(!openModal)
   };
 
   const handleCloseModal = () => {
@@ -144,37 +162,39 @@ const CancelTurn = ({ userName, handleCurrentPage, userType }) => {
 
   const handleCloseEmptyTurnModal = () => {
     setEmptyTurnModal(!emptyTurnModal);
+    handleCurrentPage(PAGES.HOME);
   };
 
-
   useEffect(() => {
-    if(userType === USER_TYPE.ADMIN){
-      const fetchTurn = async () => {
-        try {
-          const data = await getShiftsByDate(dateSelected);
-          setTurnSelected(data);
-        } catch (error) {
-          console.error("Error fetching service info:", error);
-        }
-      };
-      fetchTurn();
-    } else {
     const fetchTurn = async () => {
       try {
-        const data = await checkUserShiftByDate(userName, dateSelected);
+        const data =
+          userType === USER_TYPE.ADMIN
+            ? await getShiftsByDate(dateSelected)
+            : await checkUserShiftByDate(userName, dateSelected);
         setTurnSelected(data);
+        if(data.length === 0){ setEmptyTurnModal(true)}
       } catch (error) {
+        
         console.error("Error fetching service info:", error);
       }
     };
-    fetchTurn();
+
+    if (dateSelected) {
+      fetchTurn();
     }
   }, [userName, dateSelected, userType]);
-  console.log("turn selected: ", turnSelected)
 
-  const deleteTurn = async () => {
+  const handleCancelAdminTurn = (id) => {
+    deleteTurn(id);
+    handleOpenModal();
+  };
+
+  const deleteTurn = async (turnId) => {
     try {
-      const deleted = await deleteShiftById(turnSelected[0].id);
+      const deleted = await deleteShiftById(
+        turnId && userType === USER_TYPE.ADMIN ? turnId : turnSelected[0].id
+      );
       if (deleted) {
         setIsCanceled(deleted);
         setMessage("El turno se canceló exitosamente");
@@ -194,14 +214,23 @@ const CancelTurn = ({ userName, handleCurrentPage, userType }) => {
           showCardInfo={handleShowTurnCard}
         />
       )}
-      {showTurnCard && isNotEmptyTurnData && (
-        <TurnToCancel turnData={turnSelected[0]} />
+      {showTurnCard && isNotEmptyTurnData && userType === USER_TYPE.USER && (
+        <>
+          <TurnToCancel turnData={turnSelected[0]} />
+          <button className="cancelTurnButton" onClick={handleCancelTurn}>
+            Cancelar turno
+          </button>
+        </>
       )}
-      {showTurnCard && isNotEmptyTurnData &&(
-        <button className="cancelTurnButton" onClick={() => handleCancelTurn()}>
-          Cancelar turno
-        </button>
-      )}
+      {showTurnCard &&
+        isNotEmptyTurnData &&
+        userType === USER_TYPE.ADMIN &&
+        turnSelected.length > 0 && (
+          <CancelTurnAdmin
+            turnList={turnSelected}
+            handleCancelAdminTurn={handleCancelAdminTurn}
+          />
+        )}
       <BasicModal
         open={openModal}
         handleOpen={handleCloseModal}

@@ -14,9 +14,15 @@ export const fetchServiceInfo = async (serviceType) => {
     }
 };
 
-export const fetchUsers = async () => {
+export const fetchUsers = async (keycloak) => {
     try {
-        const response = await fetch(SERVICES_BACK.GET_USERS);
+        const response = await fetch(SERVICES_BACK.GET_USERS, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${keycloak.token}`,
+            },
+        });
         if (!response.ok) {
             throw new Error(`Error en la petición: ${response.statusText}`);
         }
