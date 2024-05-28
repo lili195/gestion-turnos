@@ -1,10 +1,10 @@
-package com.TurnsManagement.TransactionsServices.controller;
+package com.turnsManagement.TransactionService.controller;
 
-import com.TurnsManagement.TransactionsServices.model.Dependent;
-import com.TurnsManagement.TransactionsServices.model.Transaction;
-import com.TurnsManagement.TransactionsServices.model.TransactionRequestDTO;
-import com.TurnsManagement.TransactionsServices.model.User;
-import com.TurnsManagement.TransactionsServices.service.TransactionService;
+import com.turnsManagement.TransactionService.model.Dependent;
+import com.turnsManagement.TransactionService.model.Transaction;
+import com.turnsManagement.TransactionService.model.TransactionRequestDTO;
+import com.turnsManagement.TransactionService.model.User;
+import com.turnsManagement.TransactionService.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,5 +37,9 @@ public class TransactionController {
 
         Transaction newTrans = tranService.add(transaction);
         return new ResponseEntity<>(newTrans, HttpStatus.CREATED);
+    }
+    public void processShiftMessage(String message) {
+        // Aquí puedes agregar la lógica para procesar el mensaje como lo desees
+        System.out.println("Mensaje del evento de turno recibido en el controlador: " + message);
     }
 }

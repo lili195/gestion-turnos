@@ -1,7 +1,8 @@
-package com.TurnsManagement.TransactionsServices.controller;
+package com.turnsManagement.TransactionService.controller;
 
-import com.TurnsManagement.TransactionsServices.model.User;
-import com.TurnsManagement.TransactionsServices.service.UserService;
+import com.turnsManagement.TransactionService.application.listeners.ShiftEventListener;
+import com.turnsManagement.TransactionService.model.User;
+import com.turnsManagement.TransactionService.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

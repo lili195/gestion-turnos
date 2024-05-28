@@ -1,7 +1,7 @@
-package com.TurnsManagement.TransactionsServices.controller;
+package com.turnsManagement.TransactionService.controller;
 
-import com.TurnsManagement.TransactionsServices.model.Dependent;
-import com.TurnsManagement.TransactionsServices.service.DependentService;
+import com.turnsManagement.TransactionService.model.Dependent;
+import com.turnsManagement.TransactionService.service.DependentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

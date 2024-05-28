@@ -1,7 +1,7 @@
-package com.TurnsManagement.TransactionsServices.service;
+package com.turnsManagement.TransactionService.service;
 
-import com.TurnsManagement.TransactionsServices.model.Dependent;
-import com.TurnsManagement.TransactionsServices.repository.DependentRepository;
+import com.turnsManagement.TransactionService.model.Dependent;
+import com.turnsManagement.TransactionService.repository.DependentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

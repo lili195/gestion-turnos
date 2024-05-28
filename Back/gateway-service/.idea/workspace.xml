@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b98d0db8-675f-4670-a1aa-62883e127af2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../../Front/gestion-turnos/src/constants/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../Front/gestion-turnos/src/constants/constants.js" afterDir="false" />
-    </list>
+    <list default="true" id="b98d0db8-675f-4670-a1aa-62883e127af2" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -107,6 +105,7 @@
       <workItem from="1716590969985" duration="3000" />
       <workItem from="1716598850560" duration="614000" />
       <workItem from="1716606467575" duration="342000" />
+      <workItem from="1716873414691" duration="20000" />
     </task>
     <servers />
   </component>
