@@ -16,13 +16,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-//    @PostMapping("/addUser")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public void addUser(@RequestBody UserRequest userRequest) {
-//        System.out.println(userRequest);
-//        this.userService.addUser(userRequest);
-//    }
-
     @PostMapping("/addUser")
     @ResponseStatus(HttpStatus.CREATED)
     public void addUser(Authentication authentication) {
